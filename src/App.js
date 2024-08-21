@@ -20,27 +20,34 @@ class App extends Component {
   //   TODO: Add your code for remove all cart items, increment cart item quantity, decrement cart item quantity, remove cart item
 
   incrementCartItemQuantity = id => {
-    const {cartList} = this.state
-    const filteredList = cartList.filter(each => each.id === id)
-    filteredList[0].quantity += 1
-    console.log(filteredList)
+    // console.log(filteredList)
     this.setState(prevState => ({
       cartList: [
-        ...prevState.cartList.filter(each => each.id !== id),
-        ...filteredList,
+        ...prevState.cartList.map(each => {
+          if (each.id !== id) {
+            return each
+          }
+          return {...each, quantity: each.quantity + 1}
+        }),
       ],
     }))
   }
 
   decrementCartItemQuantity = id => {
     const {cartList} = this.state
-    const filteredList = cartList.filter(each => each.id === id)
-    filteredList[0].quantity -= 1
-    console.log(filteredList)
+    const filteredList = cartList.filter(each => each.id)
+    if (filteredList[0].quantity === 1) {
+      this.removeCartItem(id)
+    }
+    // console.log(filteredList)
     this.setState(prevState => ({
       cartList: [
-        ...prevState.cartList.filter(each => each.id !== id),
-        ...filteredList,
+        ...prevState.cartList.map(each => {
+          if (each.id !== id) {
+            return each
+          }
+          return {...each, quantity: each.quantity - 1}
+        }),
       ],
     }))
   }
@@ -50,6 +57,7 @@ class App extends Component {
   }
 
   removeCartItem = id => {
+    // console.log(id)
     const {cartList} = this.state
     const filteredList = cartList.filter(each => each.id !== id)
     this.setState({cartList: filteredList})
@@ -63,16 +71,16 @@ class App extends Component {
     if (itemInList.length === 0) {
       this.setState(prevState => ({cartList: [...prevState.cartList, product]}))
     } else {
-      itemInList[0].quantity += 1
-      this.setState(prevState => {
-        console.log(prevState)
-        return {
-          cartList: [
-            ...prevState.cartList.filter(each => each.id !== product.id),
-            ...itemInList,
-          ],
-        }
-      })
+      this.setState(prevState => ({
+        cartList: [
+          ...prevState.cartList.map(each => {
+            if (each.id !== product.id) {
+              return each
+            }
+            return {...each, quantity: each.quantity + product.quantity}
+          }),
+        ],
+      }))
     }
 
     //   TODO: Update the code here to implement addCartItem

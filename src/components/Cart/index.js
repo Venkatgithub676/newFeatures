@@ -1,6 +1,6 @@
 import Header from '../Header'
 import CartListView from '../CartListView'
-
+import CartSummary from '../CartSummary'
 import CartContext from '../../context/CartContext'
 import EmptyCartView from '../EmptyCartView'
 
@@ -16,10 +16,17 @@ const Cart = () => (
       const clickRemove = () => {
         removeAllCartItems()
       }
+      let totalPrice
+      if (showEmptyView) {
+        totalPrice = 0
+      } else if (cartList.length === 1) {
+        totalPrice = cartList[0].quantity * cartList[0].price
+      } else {
+        const pricesList = cartList.map(each => each.quantity * each.price)
+        totalPrice = pricesList.reduce((currentVal, acc) => currentVal + acc)
+      }
 
-      const totalPrice = 0
-      const filteredList = cartList.map(each => each.price * each.quantity)
-      console.log(filteredList)
+      /* console.log(cartList) */
 
       return (
         <>
@@ -39,9 +46,7 @@ const Cart = () => (
                 </button>
                 <CartListView />
                 {/* TODO: Add your code for Cart Summary here */}
-                <h1>
-                  Order Total: <span>{}</span>
-                </h1>
+                <CartSummary totalPrice={totalPrice} cartList={cartList} />
               </div>
             )}
           </div>

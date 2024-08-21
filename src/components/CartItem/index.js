@@ -12,6 +12,7 @@ const CartItem = props => (
         removeCartItem,
         incrementCartItemQuantity,
         decrementCartItemQuantity,
+        cartList,
       } = value
       const {cartItemDetails} = props
       const {id, title, brand, quantity, price, imageUrl} = cartItemDetails
@@ -19,13 +20,9 @@ const CartItem = props => (
         removeCartItem(id)
       }
       // TODO: Update the functionality to increment and decrement quantity of the cart item
-
+      console.log(cartList)
       const clickMinus = () => {
-        if (quantity <= 1) {
-          removeCartItem(id)
-        } else {
-          decrementCartItemQuantity(id)
-        }
+        decrementCartItemQuantity(id)
       }
       const clickPlus = () => {
         incrementCartItemQuantity(id)
@@ -43,6 +40,7 @@ const CartItem = props => (
               <button
                 type="button"
                 onClick={clickMinus}
+                data-testid="minus"
                 className="quantity-controller-button"
               >
                 <BsDashSquare color="#52606D" size={12} alt="minusBtn" />
@@ -52,6 +50,7 @@ const CartItem = props => (
                 type="button"
                 onClick={clickPlus}
                 className="quantity-controller-button"
+                data-testid="plus"
               >
                 <BsPlusSquare color="#52606D" size={12} alt="plusBtn" />
               </button>
@@ -71,6 +70,7 @@ const CartItem = props => (
             className="delete-button"
             type="button"
             onClick={onRemoveCartItem}
+            data-testid="remove"
           >
             <AiFillCloseCircle alt="closeBtn" color="#616E7C" size={20} />
           </button>
